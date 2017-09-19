@@ -1,0 +1,336 @@
+﻿@model TicketsLostPastDue.Models.ViewModelTicketDetail
+
+@{
+    ViewBag.Title = "Process Past Due as Done";
+}
+<head>		
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    @*<link href="~/Content/themes/base/accordion.css" rel="stylesheet" />*@
+    @*<link rel="stylesheet" href="/resources/demos/style.css">*@
+    @*<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>*@
+    <script>
+        //$(function () {
+        //    $("#accordion").accordion({
+        //        collapsible: true
+        //    });
+            
+        //});
+    </script>
+</head>
+<h2>@ViewBag.Title</h2>
+<h3>@ViewBag.Message</h3>
+<style type="text/css">
+    span.field-validation-error {
+        background: red;
+        color: black;
+    }
+    .inspectdtl {
+        -moz-box-shadow: 0 0 2px black;
+        -webkit-box-shadow: 0 0 2px black;
+        display: none;
+    }
+    .ui-accordion .ui-accordion-header {
+        cursor: pointer;
+        position: relative;
+        margin-top: 1px;
+        zoom: 1;
+    }
+
+    .ui-accordion .ui-accordion-li-fix {
+        display: inline;
+    }
+
+    .ui-accordion .ui-accordion-header-active {
+        border-bottom: 0 !important;
+    }
+
+    .ui-accordion .ui-accordion-header a {
+        display: block;
+        font-size: 1em;
+        padding: .5em .5em .5em .7em;
+    }
+    /* IE7-/Win - Fix extra vertical space in lists */
+    .ui-accordion a {
+        zoom: 1;
+    }
+
+    .ui-accordion-icons .ui-accordion-header a {
+        padding-left: 2.2em;
+    }
+
+    .ui-accordion .ui-accordion-header .ui-icon {
+        position: absolute;
+        left: .5em;
+        top: 50%;
+        margin-top: -8px;
+    }
+
+    .ui-accordion .ui-accordion-content {
+        padding: 1em 2.2em;
+        border-top: 0;
+        margin-top: -2px;
+        position: relative;
+        top: 1px;
+        margin-bottom: 2px;
+        overflow: auto;
+        display: none;
+        zoom: 1;
+    }
+
+    .ui-accordion .ui-accordion-content-active {
+        display: block;
+    }
+    .footer {
+        position: relative;
+        bottom: 0;
+        /*width: 100%;*/
+        height: 5px;
+    }
+</style>
+
+<div class="container">
+
+
+    @using (Html.BeginForm("Done", "Home", FormMethod.Post, new { ticketmodel = Model }))
+{
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true)
+
+            @Html.Partial("TicketDetailWithInspection")
+            <div class="invoicedtl">
+
+          
+                <label>Past Year Invoices</label>
+                <div id="accordion"  class="panel">
+                  
+                     
+                    @{  if (!Model.hdrinv.Any())
+                        {
+                            <div class="col-md-12 col-xs-12"> <p>There are no Invoices</p></div>
+
+                        }
+                        if (Model.hdrinv != null)
+                        {
+                            foreach (var t in Model.hdrinv)
+                            {
+
+                                  <h3>
+                                    
+                                      <strong>@( " Invoice Date: " + @t.InvoiceDate  )   &nbsp; &nbsp;  @("    Dept: " + @t.ServCompany)  &nbsp; &nbsp;  @(" Invoice Desc: " + t.invdesc) &nbsp; &nbsp; @(" Tech name: " + @t.Techname) &nbsp; &nbsp; @(" Invoice#: " + @t.InvoiceNumber) </strong>
+                                
+                                  </h3>
+
+
+                                   <div>
+                                         
+                                              <table class="invtable col-md-12 col-xs-12">
+                                                
+                                                   <thead>
+                                                         <tr>
+                                                            <th>Part Description </th>
+                                                             <th>Quantity </th>
+                                                             <th>Unit Price</th>
+                                                              <th>Ext Price</th>
+                                                         </tr>
+                                                   </thead>
+                                                 
+                                                  @foreach (var m in Model.invs)
+                                                  {
+                                                      if (@m.invoicenumber == @t.InvoiceNumber)
+                                                      {
+                                                                     <tr>
+                                                                       <td>
+                                                                            <div class="col-md-5 col-xs-5">
+                                                                              @m.partdesc
+                                                                             </div>
+                                                                      </td>
+                                                                       <td>
+
+                                                                           <div class="col-md-2 col-xs-2">
+                                                                           @m.quantity
+                                                                            </div>
+                                                                       </td>
+                                                                         <td>
+
+                                                                                <div class="col-md-2 col-xs-2">
+                                                                               @String.Format("{0:C}", @m.UnitPrice)
+                                                                               </div>
+                                                                          </td>
+                                                                          <td>
+
+                                                                              <div class="col-md-3 col-xs-3">
+                                                                                 @String.Format("{0:C}", @m.LineItemExtPrice)
+                                                                              </div>
+                                                                           </td>
+                                                                   </tr>
+
+                                                      }
+                                                  }
+
+
+                                               </table>
+                                             
+                                   </div>
+
+
+
+                            }
+
+                        }
+                    }
+                </div>
+
+
+
+            </div>
+
+            <div class="inspectdtl panel" style="margin-top: 50px";>
+                @*Hiding inspections that would be listed because customer service will manually fix the records*@
+         
+                <p><b>Mark the inspections you want to include in the process</b></p>
+                <table id="InspectionDtl" class="inspect">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th class="col-md-3 col-xs-3">Cycle</th>
+                            <th class="col-md-3 col-xs-3">System</th>
+                            <th class="col-md-3 col-xs-3">Next Inspection</th>
+                            <th class="col-md-3 col-xs-3">Last Inspection</th>
+                        </tr>
+                    </thead>
+
+
+                    @for (var i = 0; i < Model.sysinsp.Count(); i++)
+                    {
+
+
+                        <tr>
+                            <td>
+                                @Html.HiddenFor(m => m.sysinsp[i].inspectionid)
+                                @Html.HiddenFor(m => m.sysinsp[i].syscode)
+                                @Html.HiddenFor(m => m.sysinsp[i].nextinpdate)
+                                @Html.HiddenFor(m => m.sysinsp[i].lastinpdate)
+                                @Html.HiddenFor(m => m.sysinsp[i].customer_system_id)
+                                @Html.HiddenFor(m => m.sysinsp[i].inspcycldesc)
+                                @Html.HiddenFor(m => m.sysinsp[i].routeid)
+                                @Html.CheckBoxFor(m => m.sysinsp[i].IsSelected)
+
+                                @*@Html.EditorFor(m => m.sysinsp[i].inspectionid)*@
+                                <input type="hidden" name="inspectionid" id="inspectionid" value="m.sysinsp[i].inspectionid" />
+
+                            </td>
+                            <td class="col-md-3 col-xs-3">
+                                @Html.DisplayFor(m => m.sysinsp[i].inspcycldesc)
+                            </td>
+                            <td class="col-md-3 col-xs-3">
+                                @Html.DisplayFor(m => m.sysinsp[i].syscode)
+
+                            </td>
+                            <td class="col-md-3 col-xs-3">
+                                @Html.DisplayFor(m => m.sysinsp[i].nextinpdate)
+                            </td>
+                            <td class="col-md-3 col-xs-3">
+                                @Html.DisplayFor(m => m.sysinsp[i].lastinpdate)
+                            </td>
+                        </tr>
+                    }
+
+                </table>
+
+            </div>
+
+
+
+
+            @Html.HiddenFor(model => model.apit.CustomerSystemId)
+            @Html.HiddenFor(model => model.apit.InspectionId)
+            @Html.HiddenFor(model => model.apit.ServiceTicketId)
+            @Html.HiddenFor(model => model.apit.Site.SiteNumber)
+            @Html.HiddenFor(model => model.apit.Customer.CustomerNumber)
+            @Html.HiddenFor(model => model.apit.SystemCode)
+            @Html.HiddenFor(model => model.tickinspectdesc)
+            @Html.HiddenFor(model => model.apit.TicketNumber)
+
+            <div>
+                <label id="lblticknote" name="ticknotelbl" for="ticknote"> Add Notes to Ticket:</label>
+           </div>
+           <div >
+                   <textarea class="col-md-12 col-xs-12" id="ticknote" style="max-width:80%" type="text" rows="3" name="ticknote" required ></textarea>
+            </div>
+            @Html.ValidationMessageFor(m => m.ticknote)
+            <div  style="margin-top:75px; margin-bottom: 25px;">
+                @*<div>
+                  <input type="submit" value="Inactivate Inspection" name="Done" />
+                </div>*@
+                <div style="padding-top: 20px">
+                    @if (@HttpContext.Current.Session["title"].ToString() == "Technician")
+                    {
+                        <input type="submit" value="Submit for Approval" name="Done" />
+                    }
+                    else { 
+                    <input type = "submit" value = "Keep On Past Due" name = "Done" />
+                            }
+                </div>
+            </div>
+
+    }
+
+</div>
+
+    <script>
+        $(document).ready(function () {
+            $('#accordion').accordion({ collapsible: true, active: 'none' });
+        });
+        $(document).ready(function () {
+         
+          $('#Selectedcompetitor').change(function (e) {
+          //    alert($('#Selectedcompetitor').val());
+              if ($(this).val() === "Other") {
+                  $('#competitorothertxt').css('display' , 'inline');
+                  $('#competitorothertxtlbl').css('display', 'inline');
+              }
+              else {
+                  $('#competitorothertxt').css('display', 'none');
+                  $('#competitorothertxtlbl').css('display', 'none');
+              }
+          });
+  //        $(function () {
+         
+   //       });
+          //$(document).ready(function () {
+          //    var acc = document.getElementsByClassName("accordion");
+          //    var i;
+
+          //    for (i = 0; i < acc.length; i++) {
+          //        acc[i].onclick = function () {
+          //            this.classList.toggle("active");
+          //            this.nextElementSibling.classList.toggle("show");
+          //        }
+
+         
+  
+         
+
+              
+
+              //$(window).on("navigate", function (event, data) {
+              //    var direction = data.state.direction;
+              //    if (direction == 'back') {
+              //        // do something
+              //    }
+              //    if (direction == 'forward') {
+              //        // do something else
+              //    }
+              //});
+          });
+     
+    </script>
+
+
+
+

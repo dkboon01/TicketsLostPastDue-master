@@ -1,0 +1,94 @@
+﻿@*@Model  TicketsLostPastDue.Models.APITicket*@
+  
+@{
+    ViewBag.Title = "Ticket Details";
+}
+<h2>@ViewBag.Title.</h2>
+<h3>@ViewBag.Message</h3>
+<style type="text/css">
+    /* Change background color of buttons on hover */
+    div.tab button:hover {
+        background-color: #ddd;
+    }
+
+    /* Create an active/current tablink class */
+    div.tab button.active {
+        background-color: #ccc;
+    }
+
+    /* Style the tab content */
+    .tabcontent {
+        display: none;
+        padding: 6px 12px;
+        border: 1px solid #ccc;
+        border-top: none;
+    }
+    </style>
+
+<div class="container">
+
+
+@using (Html.BeginForm("Lost", "Home", FormMethod.Post, new { TicketNo = Model }))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+
+    <fieldset>
+        <div class="editor-label">
+
+           <div class="row col-xs-3 col-md-3">
+            <label >Ticket Number:</label>
+               @Model.TicketNumber
+               </div>
+            <div class="row col-xs-3 col-md-3">
+                <label>Site Number:</label>
+                @Model.Site.SiteNumber
+            </div>
+            <div class="row col-xs-3 col-md-3">
+                <label>Customer Number:</label>
+                @Model.CustomerNumber
+                </div>
+            <div class="row col-xs-3 col-md-3">
+                <label>Site Name:</label>
+                @Model.SiteName
+                </div>
+            <div class="row col-xs-3 col-md-3">
+                <label>Address:</label>
+                @Model.Site.Address1.Trim()  @Model.Site.City.Trim() , @Model.Site.State   @Model.Site.Zip
+                </div>
+            <div class="row col-xs-3 col-md-3">
+                <label>System:</label>
+                @Model.System.SystemCode
+                </div>
+            <div class="row col-xs-3 col-md-3">
+                <label>Route:</label>
+                @Model.RouteCode
+                </div>
+            <div class="row col-xs-3 col-md-3">
+                <label>Quantity:</label>
+                @Model.System.AlarmAccount
+                </div>
+                <div class="row col-xs-3 col-md-3">
+                    <label>Technician</label>
+                    @Model.ServiceTechCode
+                </div>
+            <div class="row col-xs-3 col-md-3" style="display: none">
+            
+                @Model.CustomerSiteId
+            </div>
+
+        </div>
+        <hr />
+        <div class="col-md-12 col-xs-12">
+        <input type="submit" name="Lost" value="Lost" />
+        <input type="submit" name="OOB" value="OOB" />
+        </div>
+
+    </fieldset>
+   
+}
+    @*<div class="col-md-12 col-xs-12">
+        @Html.ActionLink("LOST", "LOST", new { APITicket = Model })
+        @Html.ActionLink("OOB", "OOB", new { APITicket = Model })
+    </div>*@
+</div>

@@ -1,0 +1,148 @@
+﻿@model TicketsLostPastDue.Models.ViewModelTicketDetail
+
+@{
+    ViewBag.Title = "The Site is Out of Business(OOB)";
+}
+<h2>@ViewBag.Title</h2>
+<h3>@ViewBag.Message</h3>
+<style type="text/css">
+    .inspectdtl {
+        -moz-box-shadow: 0 0 2px black;
+        -webkit-box-shadow: 0 0 2px black;
+    }
+</style>
+
+<div class="container">
+
+
+    @using (Html.BeginForm("OOB", "Home", FormMethod.Post, new { ticketmodel = Model }))
+
+    {
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true)
+        <div>
+            @Html.Partial("TicketDetailWithInspection")
+
+            <div class="inspectdtl">
+
+                @*<input id="allcheckbox" type="checkbox" name="inspect" value="All" />*@
+                <p><b>Mark any other inspections that you want to include in the process</b></p>
+@{
+    if (!Model.sysinsp.Any())
+    {
+        <p>No Additional Inspections found for this Service Company</p>
+    }
+    else
+    {
+                <table id="InspectionDtl" class="inspect">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th class="col-md-3 col-xs-3">Cycle</th>
+                            <th class="col-md-3 col-xs-3">System</th>
+                            <th class="col-md-3 col-xs-3">Next Inspection</th>
+                            <th class="col-md-3 col-xs-3">Last Inspection</th>
+                        </tr>
+                    </thead>
+
+
+                    @for (var i = 0; i < Model.sysinsp.Count(); i++)
+                    {
+
+
+                        <tr>
+                            <td>
+                                @Html.HiddenFor(m => m.sysinsp[i].inspectionid)
+                                @Html.HiddenFor(m => m.sysinsp[i].syscode)
+                                @Html.HiddenFor(m => m.sysinsp[i].nextinpdate)
+                                @Html.HiddenFor(m => m.sysinsp[i].lastinpdate)
+                                @Html.HiddenFor(m => m.sysinsp[i].customer_system_id)
+                                @Html.HiddenFor(m => m.sysinsp[i].inspcycldesc)
+                                @Html.HiddenFor(m => m.sysinsp[i].routeid)
+                                @Html.CheckBoxFor(m => m.sysinsp[i].IsSelected)
+
+                                @*@Html.EditorFor(m => m.sysinsp[i].inspectionid)*@
+                                <input type="hidden" name="inspectionid" id="inspectionid" value="m.sysinsp[i].inspectionid" />
+
+                            </td>
+                            <td class="col-md-3 col-xs-3">
+                                @Html.DisplayFor(m => m.sysinsp[i].inspcycldesc)
+                            </td>
+                            <td class="col-md-3 col-xs-3">
+                                @Html.DisplayFor(m => m.sysinsp[i].syscode)
+
+                            </td>
+                            <td class="col-md-3 col-xs-3">
+                                @Html.DisplayFor(m => m.sysinsp[i].nextinpdate)
+                            </td>
+                            <td class="col-md-3 col-xs-3">
+                                @Html.DisplayFor(m => m.sysinsp[i].lastinpdate)
+                            </td>
+                        </tr>
+                    }
+
+                </table>
+        }
+    }
+            </div>
+
+            <br />
+            <br />
+
+
+            @*editfor here*@
+
+
+            @Html.HiddenFor(model => model.apit.CustomerSystemId)
+            @Html.HiddenFor(model => model.apit.InspectionId)
+            @Html.HiddenFor(model => model.apit.ServiceTicketId)
+            @Html.HiddenFor(model => model.apit.Site.SiteNumber)
+            @Html.HiddenFor(model => model.apit.Customer.CustomerNumber)
+            @Html.HiddenFor(model => model.apit.SystemCode)
+            @Html.HiddenFor(model => model.tickinspectdesc)
+            @Html.HiddenFor(model => model.apit.TicketNumber)
+            @Html.HiddenFor(model => model.apit.Route_Id)
+
+            @*   @Html.HiddenFor(model => model.apit.) *@
+
+
+
+
+            <label>Select the competitor that we lost the inspection to:</label>
+            @Html.DropDownListFor(m => m.Selectedcompetitor, new SelectList(Model.competitorslist, "Userdef_8_Code", "Userdef_8_Code", 0))
+
+            @*@Html.HiddenFor(model => model.Selectedcompetitor)*@
+            <label id="competitorothertxtlbl" style="display:none" name="competitorothertxtlbl" for="competitorothertxt"> Enter another competitor </label>
+            <input id="competitorothertxt" type="text" maxlength="50" name="competitorothertxt" style="display:none" />
+
+            <div>
+                <input type="submit" value="Submit" />
+            </div>
+            <div class="col-xs-12 col-md-12">
+                <p>If other inspections are listed above, please check the box to mark them OOB as well. The only exception is if a EE is marked OOB for a Portables service company, then do NOT mark the FE as OOB.</p>
+            </div>
+        </div>
+    }
+
+</div>
+@section Scripts
+{
+    <script type="text/JavaScript">
+      $(document).ready(function () {
+          $('#Selectedcompetitor').change(function (e) {
+          //    alert($('#Selectedcompetitor').val());
+              if ($(this).val() === "Other") {
+                  $('#competitorothertxt').css('display' , 'inline');
+                  $('#competitorothertxtlbl').css('display', 'inline');
+              }
+              else {
+                  $('#competitorothertxt').css('display', 'none');
+                  $('#competitorothertxtlbl').css('display', 'none');
+              }
+          });
+      });
+    </script>
+}
+
+
+

@@ -10,6 +10,8 @@ namespace TicketsLostPastDue.Models
     public class ViewModelTicketDetail
     {
         public APITicket apit { get; set; }
+        public int tcktrouteid { get; set; }
+        public int tcktroutecode { get; set; }
         public List<SearchInspections> sysinsp {get; set;}
         public List<Competitors> competitorslist { get; set;  }
      //   public SelectList competitor { get; set; }

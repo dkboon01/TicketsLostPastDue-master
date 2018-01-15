@@ -58,6 +58,7 @@
                                 @Html.HiddenFor(m => m.sysinsp[i].lastinpdate)
                                 @Html.HiddenFor(m => m.sysinsp[i].customer_system_id)
                                 @Html.HiddenFor(m => m.sysinsp[i].inspcycldesc)
+                                @Html.HiddenFor(m => m.sysinsp[i].routecode)
                                 @Html.HiddenFor(m => m.sysinsp[i].routeid)
                                 @Html.CheckBoxFor(m => m.sysinsp[i].IsSelected)
 
@@ -101,7 +102,9 @@
             @Html.HiddenFor(model => model.apit.SystemCode)
             @Html.HiddenFor(model => model.tickinspectdesc)
             @Html.HiddenFor(model => model.apit.TicketNumber)
-            @Html.HiddenFor(model => model.apit.Route_Id)
+            @Html.HiddenFor(model => model.apit.RouteCode)
+            @Html.HiddenFor(model => model.tcktroutecode)
+            @Html.HiddenFor(model => model.tcktrouteid)
 
             @*   @Html.HiddenFor(model => model.apit.) *@
 

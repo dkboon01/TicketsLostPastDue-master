@@ -53,12 +53,12 @@ namespace TicketsLostPastDue.Models
         public decimal HolidayRate { get; set; }
 
         public string CustomerComments { get; set; }
-        public List<Note> Notes { get; set; }
+        public List<Notes> Notes { get; set; }
         public List<Part> Parts { get; set; }
         public Customer Customer { get; set; }
         public CustomerSite Site { get; set; }
         // public List<Customer> customer { get; set; }
-        public SdSystem System { get; set; }
+        public System System { get; set; }
         public string RouteCode { get; set; }
         public int ServiceCompanyID { get; set; }
         public Competitors comp { get; set; }
@@ -323,7 +323,7 @@ namespace TicketsLostPastDue.Models
         /// Set to true if this account is a Master Account; will be added to AR_Master_Account table
         /// </summary>
         public bool? IsMaster { get; set; }
-
+        public bool? MasterAccountBilling { get; set; }
         /// <summary>
         /// If set to true, all sub account invoices are billed to Primary Master
         /// </summary>
@@ -351,9 +351,9 @@ namespace TicketsLostPastDue.Models
         /// </summary>
         public string FullNameAndNumber { get; set; }
 
-        public CustomerBill CustomerBillPrimary { get; set; }
+        public CustomerBillPrimary CustomerBillPrimary { get; set; }
     }
-    public class CustomerSite
+    public class Site
     {
 
         /// <summary>

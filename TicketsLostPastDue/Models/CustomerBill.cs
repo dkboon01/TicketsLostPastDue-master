@@ -10,7 +10,7 @@ namespace SedonaServices.Models
     /// <summary>
     /// 
     /// </summary>
-    public class CustomerBill
+    public class CustomerBillPrimary
     {
         /// <summary>
         /// Sedona internal autonumber for the Customer Billing Address record

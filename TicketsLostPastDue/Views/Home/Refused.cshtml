@@ -24,112 +24,99 @@
     {
         @Html.AntiForgeryToken()
         @Html.ValidationSummary(true)
-        <div>
-            @Html.Partial("TicketDetailWithInspection")
-
-            <div class="inspectdtl">
-
-                @*<input id="allcheckbox" type="checkbox" name="inspect" value="All" />*@
-                <p><b>Mark any other inspections that you want to include in the process.</b></p>
-@{
-    if (!Model.sysinsp.Any())
-    {
-        <p>No Additional Inspections found for this Service Company</p>
-    }
-    else
-    {
-                <table id="InspectionDtl" class="inspect">
-                    <thead>
-                        <tr>
-                            <th></th>
-                            <th class="col-md-3 col-xs-3">Cycle</th>
-                            <th class="col-md-3 col-xs-3">System</th>
-                            <th class="col-md-3 col-xs-3">Next Inspection</th>
-                            <th class="col-md-3 col-xs-3">Last Inspection</th>
-                        </tr>
-                    </thead>
-
-
-                    @for (var i = 0; i < Model.sysinsp.Count(); i++)
-                    {
-
-
-                        <tr>
-                            <td>
-                                @Html.HiddenFor(m => m.sysinsp[i].inspectionid)
-                                @Html.HiddenFor(m => m.sysinsp[i].syscode)
-                                @Html.HiddenFor(m => m.sysinsp[i].nextinpdate)
-                                @Html.HiddenFor(m => m.sysinsp[i].lastinpdate)
-                                @Html.HiddenFor(m => m.sysinsp[i].customer_system_id)
-                                @Html.HiddenFor(m => m.sysinsp[i].inspcycldesc)
-                                @Html.HiddenFor(m => m.sysinsp[i].routeid)
-
-                                @Html.CheckBoxFor(m => m.sysinsp[i].IsSelected)
-
-                                @*@Html.EditorFor(m => m.sysinsp[i].inspectionid)*@
-                                <input type="hidden" name="inspectionid" id="inspectionid" value="m.sysinsp[i].inspectionid" />
-
-                            </td>
-                            <td class="col-md-3 col-xs-3">
-                                @Html.DisplayFor(m => m.sysinsp[i].inspcycldesc)
-                            </td>
-                            <td class="col-md-3 col-xs-3">
-                                @Html.DisplayFor(m => m.sysinsp[i].syscode)
-
-                            </td>
-                            <td class="col-md-3 col-xs-3">
-                                @Html.DisplayFor(m => m.sysinsp[i].nextinpdate)
-                            </td>
-                            <td class="col-md-3 col-xs-3">
-                                @Html.DisplayFor(m => m.sysinsp[i].lastinpdate)
-                            </td>
-                        </tr>
-                    }
-
-                </table>
+    <div>
+        @Html.Partial("TicketDetailWithInspection")
+        <div class="inspectdtl">
+            @*<input id="allcheckbox" type="checkbox" name="inspect" value="All" />*@
+            <p><b>Mark any other inspections that you want to include in the process.</b></p>
+            @{
+            if (!Model.sysinsp.Any())
+            {
+                <p>No Additional Inspections found for this Service Company</p>
         }
+        else
+        {
+            <table id="InspectionDtl" class="inspect">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th class="col-md-3 col-xs-3">Cycle</th>
+                        <th class="col-md-3 col-xs-3">System</th>
+                        <th class="col-md-3 col-xs-3">Next Inspection</th>
+                        <th class="col-md-3 col-xs-3">Last Inspection</th>
+                    </tr>
+                </thead>
+
+                @for (var i = 0; i < Model.sysinsp.Count(); i++)
+            {
+
+
+                <tr>
+                    <td>
+                        @Html.HiddenFor(m => m.sysinsp[i].inspectionid)
+                        @Html.HiddenFor(m => m.sysinsp[i].syscode)
+                        @Html.HiddenFor(m => m.sysinsp[i].nextinpdate)
+                        @Html.HiddenFor(m => m.sysinsp[i].lastinpdate)
+                        @Html.HiddenFor(m => m.sysinsp[i].customer_system_id)
+                        @Html.HiddenFor(m => m.sysinsp[i].inspcycldesc)
+                        @Html.HiddenFor(m => m.sysinsp[i].routecode)
+                        @Html.HiddenFor(m => m.sysinsp[i].routeid)
+                        @Html.CheckBoxFor(m => m.sysinsp[i].IsSelected)
+                        @*@Html.EditorFor(m => m.sysinsp[i].inspectionid)*@
+                        <input type="hidden" name="inspectionid" id="inspectionid" value="m.sysinsp[i].inspectionid" />
+                    </td>
+                    <td class="col-md-3 col-xs-3">
+                        @Html.DisplayFor(m => m.sysinsp[i].inspcycldesc)
+                    </td>
+                    <td class="col-md-3 col-xs-3">
+                        @Html.DisplayFor(m => m.sysinsp[i].syscode)
+                    </td>
+                    <td class="col-md-3 col-xs-3">
+                        @Html.DisplayFor(m => m.sysinsp[i].nextinpdate)
+                    </td>
+                    <td class="col-md-3 col-xs-3">
+                        @Html.DisplayFor(m => m.sysinsp[i].lastinpdate)
+                    </td>
+                </tr>
+        }
+            </table>
     }
-            </div>
-
-            <br />
-            <br />
-
-
-            @*editfor here*@
-
-
-            @Html.HiddenFor(model => model.apit.CustomerSystemId)
-            @Html.HiddenFor(model => model.apit.InspectionId)
-            @Html.HiddenFor(model => model.apit.ServiceTicketId)
-            @Html.HiddenFor(model => model.apit.Site.SiteNumber)
-            @Html.HiddenFor(model => model.apit.Customer.CustomerNumber)
-            @Html.HiddenFor(model => model.apit.SystemCode)
-            @Html.HiddenFor(model => model.tickinspectdesc)
-            @Html.HiddenFor(model => model.apit.TicketNumber)
-            @Html.HiddenFor(model => model.apit.Route_Id)
-
-            @*   @Html.HiddenFor(model => model.apit.) *@
-
-
-
-
-            @*<label>Select the competitor that we lost the inspection to:</label>*@
-            @*@Html.DropDownListFor(m => m.Selectedcompetitor, new SelectList(Model.competitorslist, "Userdef_8_Code", "Userdef_8_Code", 0))*@
-
-            @*@Html.HiddenFor(model => model.Selectedcompetitor)*@
-            <label id="competitorothertxtlbl"  name="competitorothertxtlbl" for="competitorothertxt"> Please provide the name of the person who physically turned you away when you stopped out? </label>
-            @*<input id="competitorothertxt" type="text" maxlength="100" name="competitorothertxt" />*@
-            @Html.TextBoxFor(m => m.competitorothertxt)
-
-            @* <input id="competitorothertxt" type="text" maxlength="50" name="competitorothertxt" style="display:none" /> *@
-            @Html.ValidationMessageFor(m => m.competitorothertxt)
-            <div>
-                 <input type="submit" value="Submit" />
-            </div>
-            <div class="col-xs-12 col-md-12">
-                <p>If other inspections are listed above, do NOT check the box above to mark other inspections as REFUSED.</p>
-            </div>
+            }
         </div>
+        <br />
+        <br />
+
+        @*editfor here*@
+
+        @Html.HiddenFor(model => model.apit.CustomerSystemId)
+        @Html.HiddenFor(model => model.apit.InspectionId)
+        @Html.HiddenFor(model => model.apit.ServiceTicketId)
+        @Html.HiddenFor(model => model.apit.Site.SiteNumber)
+        @Html.HiddenFor(model => model.apit.Customer.CustomerNumber)
+        @Html.HiddenFor(model => model.apit.SystemCode)
+        @Html.HiddenFor(model => model.tickinspectdesc)
+        @Html.HiddenFor(model => model.apit.TicketNumber)
+        @Html.HiddenFor(model => model.apit.RouteCode)
+        @Html.HiddenFor(model => model.tcktroutecode)
+        @Html.HiddenFor(model => model.tcktrouteid)
+        @*   @Html.HiddenFor(model => model.apit.) *@
+
+
+        @*<label>Select the competitor that we lost the inspection to:</label>*@
+        @*@Html.DropDownListFor(m => m.Selectedcompetitor, new SelectList(Model.competitorslist, "Userdef_8_Code", "Userdef_8_Code", 0))*@
+        @*@Html.HiddenFor(model => model.Selectedcompetitor)*@
+        <label id="competitorothertxtlbl" name="competitorothertxtlbl" for="competitorothertxt"> Please provide the name of the person who physically turned you away when you stopped out? </label>
+        @*<input id="competitorothertxt" type="text" maxlength="100" name="competitorothertxt" />*@
+        @Html.TextBoxFor(m => m.competitorothertxt)
+        @* <input id="competitorothertxt" type="text" maxlength="50" name="competitorothertxt" style="display:none" /> *@
+        @Html.ValidationMessageFor(m => m.competitorothertxt)
+        <div>
+            <input type="submit" value="Submit" />
+        </div>
+        <div class="col-xs-12 col-md-12">
+            <p>If other inspections are listed above, do NOT check the box above to mark other inspections as REFUSED.</p>
+        </div>
+    </div>
     }
 
 </div>

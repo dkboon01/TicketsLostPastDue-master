@@ -164,8 +164,8 @@ namespace SedonaServices.Models
         /// <summary>
         /// Do not set explicitly; pass in GroupCode and this will be validated and set automatically
         /// </summary>
-        public int? CustomerGroupID { get; set; }
-
+public int? CustomerGroupID { get; set; }
+//public Object CustomerGroupID { get; set; }
         /// <summary>
         /// Customer Group security feature; value from AR_Customer_Group table; list of valid options can be retrieved from GET: api/customergroup
         /// </summary>
@@ -209,7 +209,7 @@ namespace SedonaServices.Models
         /// <summary>
         /// The amount currently owed by the customer.  Returned only when getting a single customer.  Not used with adds and updates.
         /// </summary>
-        public decimal? BalanceDue { get; set; }
+        public double? BalanceDue { get; set; }
 
         /// <summary>
         /// The total active RMR for the customer.  Returned only when getting a single customer.  Not used with adds and updates.
@@ -228,7 +228,7 @@ namespace SedonaServices.Models
         /// </summary>
         public string FullNameAndNumber { get; set; }
 
-        public CustomerBill CustomerBillPrimary { get; set; }
+        public CustomerBillPrimary CustomerBillPrimary { get; set; }
     }
 
 
